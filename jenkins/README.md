@@ -145,6 +145,13 @@ replicaset.apps/nginx-ingress-controller-7445c5d647   1         1         1     
 ```
 
 # Run jenkins master on kubernetes
+
+use host path as volume of jenkins
+```
+$ sudo minikube ssh 'bash -c "sudo mkdir -p /mnt/vda1/data/jenkins; sudo chown 1000:1000 /mnt/vda1/data/jenkins"''
+```
+
+run jenkins from yaml
 ```
 $ kubectl create namespace kube-ops
 
@@ -164,6 +171,33 @@ deployment.apps/jenkins2   1         1         1            1           9h
 
 NAME                                  DESIRED   CURRENT   READY     AGE
 replicaset.apps/jenkins2-64874dddb7   1         1         1         9h
+```
+
+check volume data
+```
+$ sudo minikube ssh 'bash -c "ls -l /mnt/vda1/data/jenkins"'
+total 44
+-rw-r--r--  1 rkt rkt 1655 Nov 26 09:38 config.xml
+-rw-r--r--  1 rkt rkt  152 Nov 26 09:37 copy_reference_file.log
+-rw-r--r--  1 rkt rkt   58 Nov 26 09:38 failed-boot-attempts.txt
+-rw-r--r--  1 rkt rkt  156 Nov 26 09:38 hudson.model.UpdateCenter.xml
+-rw-------  1 rkt rkt 1712 Nov 26 09:35 identity.key.enc
+drwxr-xr-x  2 rkt rkt   60 Nov 26 09:34 init.groovy.d
+-rw-r--r--  1 rkt rkt   94 Nov 26 09:35 jenkins.CLI.xml
+-rw-r--r--  1 rkt rkt    7 Nov 26 09:38 jenkins.install.UpgradeWizard.state
+-rw-r--r--  1 rkt rkt  171 Nov 26 09:35 jenkins.telemetry.Correlator.xml
+drwxr-xr-x  2 rkt rkt   40 Nov 26 09:35 jobs
+drwxr-xr-x  3 rkt rkt   60 Nov 26 09:35 logs
+-rw-r--r--  1 rkt rkt  907 Nov 26 09:38 nodeMonitors.xml
+drwxr-xr-x  2 rkt rkt   40 Nov 26 09:35 nodes
+drwxr-xr-x  2 rkt rkt   40 Nov 26 09:35 plugins
+-rw-r--r--  1 rkt rkt  129 Nov 26 09:37 queue.xml.bak
+-rw-r--r--  1 rkt rkt   64 Nov 26 09:35 secret.key
+-rw-r--r--  1 rkt rkt    0 Nov 26 09:35 secret.key.not-so-secret
+drwx------  4 rkt rkt  180 Nov 26 09:35 secrets
+drwxr-xr-x  2 rkt rkt   60 Nov 26 09:35 userContent
+drwxr-xr-x  3 rkt rkt   60 Nov 26 09:35 users
+drwxr-xr-x 11 rkt rkt  520 Nov 26 09:35 war
 ```
 
 # Use jenkins
