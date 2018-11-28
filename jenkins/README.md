@@ -19,6 +19,9 @@ Test Env: MacOS 10.14.1 + minikube v0.30.0 + kubernetes v1.10.0 + jenkins 2.138.
 	- [run jenkins job](#run-jenkins-job)
 		- [basic job](#basic-job)
 		- [pipline job](#pipline-job)
+	- [Jenkins CLI](#jenkins-cli)
+	- [Jenkins API](#jenkins-api)
+	- [Jenkins SDK](#jenkins-sdk)
 
 <!-- /TOC -->
 
@@ -572,3 +575,60 @@ Description: dockerhub user auth
 add pipline script: https://github.com/Jimmy-Xu/jenkins-demo/blob/master/Jenkinsfile
 - add github.com to /etc/hosts
 - use http_proxy to clone github repo
+
+
+## Jenkins CLI
+
+```
+open http://192.168.64.50:30002/cli/
+
+//cli can be download at https://<JENKINS_URL>:<PORT>/jnlpJars/jenkins-cli.jar
+$ wget http://192.168.64.50:30002/jnlpJars/jenkins-cli.jar
+
+// genereate token for user
+118839f75430a1ccdd95abc29608f2c84f
+
+//run cli
+$ java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth "admin:<api-token>" who-am-i
+or
+$ java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth "admin:<user-password>" who-am-i
+
+//example
+$ echo 'admin:118839f75430a1ccdd95abc29608f2c84f' > jenkins_secret
+$ java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth @jenkins_secret who-am-i
+Authenticated as: admin
+Authorities:
+  authenticated
+
+$ java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth "admin:118839f75430a1ccdd95abc29608f2c84f" who-am-i
+Authenticated as: admin
+Authorities:
+  authenticated
+
+//get all command
+$ java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth @jenkins_secret help
+
+
+//create job
+$ cat job-basic.xml | java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth @jenkins_secret create-job basic
+//list all jobs
+$ java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth @jenkins_secret list-jobs
+//get job xml
+$ java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth @jenkins_secret get-job basic
+//update job
+$ cat job-basic.xml | java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth @jenkins_secret update-job basic
+//delete job
+$ java -jar jenkins-cli.jar -s http://192.168.64.50:30002  -auth @jenkins_secret delete-job basic
+```
+
+## Jenkins API
+
+```
+
+```
+
+## Jenkins SDK
+
+```
+
+```
